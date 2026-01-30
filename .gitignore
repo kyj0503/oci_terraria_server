@@ -1,4 +1,4 @@
-*.bak
+*.bak*
 *.json
 *.txt
 *.log
