@@ -8,50 +8,96 @@ x86_64 기반의 공식 서버 파일을 ARM 리눅스에서 네이티브에 준
 .
 ├── Dockerfile             # Ubuntu 24.04 + Box64 + Terraria Server 설정
 ├── docker-compose.yml     # 컨테이너 실행 및 데이터 볼륨 연결
-├── world_data/            # [Volume] 맵 파일 저장소 (호스트 공유)
+├── backup_map.sh          # [Auto] Git 기반 자동 백업 스크립트
+├── world_data/            # [Volume] 맵 파일 저장소 (호스트 공유, Git 추적 대상)
 └── README.md              # 설명서
+
 ```
 
 ## 🚀 서버 실행 및 종료
 
 ### 실행 (Build & Run)
+
 ```bash
 docker compose up -d --build
+
 ```
 
 ### 로그 확인 (초기 맵 생성 확인)
+
 ```bash
 docker compose logs -f
+
 ```
 
 ### 종료 (Stop)
+
 ```bash
 docker compose down
+
 ```
 
-## 🗺️ 맵 파일 업로드 (Windows → Server)
+## 🗺️ 맵 파일 관리
+
+### 1. 맵 파일 업로드 (Windows → Server)
 
 서버가 생성한 맵이 마음에 들지 않거나, PC에서 작업한 맵을 올리는 방법입니다.
 
-### 1. (서버) 권한 변경
-도커가 생성한 폴더는 `root` 권한이므로, 파일을 덮어쓰기 위해 권한을 가져옵니다.
+**권한 변경:** 도커가 생성한 폴더는 `root` 권한이므로, 파일을 덮어쓰기 위해 권한을 가져옵니다.
+
 ```bash
 sudo chown -R ubuntu:ubuntu ~/game_servers/oci_terraria_server/world_data
+
 ```
 
-### 2. (Windows PowerShell) 파일 전송
-**주의:** 서버는 `world1.wld` 파일만 인식합니다. 전송 시 이름을 변경해주세요.
+**파일 전송 (PowerShell):** 서버는 `world1.wld` 파일만 인식합니다.
 
 ```powershell
 # 예시: 내 PC의 'Winter.wld'를 서버의 'world1.wld'로 덮어쓰기
 scp "C:\Users\User\Documents\My Games\Terraria\Worlds\Winter.wld" ubuntu@yeonjae.kr:/home/ubuntu/game_servers/oci_terraria_server/world_data/world1.wld
+
+```
+
+### 2. 🛡️ 자동 백업 시스템 (Auto Backup)
+
+이 프로젝트는 맵 데이터 손실 방지를 위해 **Git 기반 자동 백업**이 설정되어 있습니다.
+
+#### ⚙️ 작동 원리
+
+* **스크립트:** `backup_map.sh`
+* **주기:** 매일 **오전 6시 (06:00 KST)**
+* **대상:** `world_data/` 폴더 내의 **`.wld`** 파일 (변경 사항이 있을 때만 커밋)
+* **제외:** `.gitignore` 설정을 통해 `*.bak`, `*.bak2` 등 불필요한 백업 파일은 제외합니다.
+
+#### 🕒 스케줄러 설정 (Crontab)
+
+서버에는 다음과 같은 Crontab 작업이 등록되어 있습니다.
+
+```bash
+# Crontab 확인
+crontab -l
+
+# 설정 내용
+0 6 * * * /home/ubuntu/game_servers/oci_terraria_server/backup_map.sh >/dev/null 2>&1
+
+```
+
+#### 🖐️ 수동 백업 실행
+
+즉시 백업이 필요할 경우 스크립트를 직접 실행할 수 있습니다.
+
+```bash
+./backup_map.sh
+
 ```
 
 ## 🎮 콘솔 명령어 (Server Console)
+
 서버가 켜진 상태에서 저장(save), 종료(exit) 등의 명령어를 입력하려면:
 
 ```bash
 docker attach terraria_box64
+
 ```
 
 > **⚠️ 주의:** 나갈 때는 `Ctrl + C`를 누르지 마세요! (서버 꺼짐)
