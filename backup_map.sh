@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# 스크립트가 있는 디렉터리(맵 폴더)로 이동
-cd "$(dirname "$0")"
+# 디렉터리로 이동
+cd /home/ubuntu/game_servers/oci_terraria_server
 
 # 변경 사항이 있는지 확인
 if [[ -n $(git status -s) ]]; then
