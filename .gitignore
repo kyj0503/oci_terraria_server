@@ -1,0 +1,10 @@
+*.bak
+*.json
+*.txt
+*.log
+
+# 맵 파일(.wld)만 허용
+!*.wld
+
+# 백업 스크립트 허용
+!backup_map.sh
