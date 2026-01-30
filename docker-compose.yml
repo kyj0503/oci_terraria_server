@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  terraria:
+    build: .
+    container_name: terraria_box64
+    ports:
+      - "7777:7777"
+    volumes:
+      - ./world_data:/data
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
