@@ -18,21 +18,21 @@ x86_64 기반의 공식 서버 파일을 ARM 리눅스에서 네이티브에 준
 
 ## 🚀 서버 실행 및 종료
 
-### 실행 (Build & Run)
+### 실행
 
 ```bash
 docker compose up -d --build
 
 ```
 
-### 로그 확인 (초기 맵 생성 확인)
+### 로그 확인
 
 ```bash
 docker compose logs -f
 
 ```
 
-### 종료 (Stop)
+### 종료
 
 ```bash
 docker compose down
@@ -100,7 +100,7 @@ crontab -l
 
 ```
 
-## 🎮 콘솔 명령어 (Server Console)
+## 🎮 콘솔 명령어
 
 서버가 켜진 상태에서 저장(save), 종료(exit) 등의 명령어를 입력하려면:
 
