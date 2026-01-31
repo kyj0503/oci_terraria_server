@@ -43,8 +43,6 @@ docker compose down
 
 ### 1. 맵 파일 업로드 (Windows → Server)
 
-서버가 생성한 맵이 마음에 들지 않거나, PC에서 작업한 맵을 올리는 방법입니다.
-
 **권한 변경:** 도커가 생성한 폴더는 `root` 권한이므로, 파일을 덮어쓰기 위해 권한을 가져옵니다.
 
 ```bash
@@ -60,7 +58,7 @@ scp "C:\Users\User\Documents\My Games\Terraria\Worlds\Winter.wld" ubuntu@yeonjae
 
 ```
 
-### 2. 🛡️ 시작 안전 장치 (Startup Safety Check)
+### 2. 🛡️ 시작 안전 장치
 
 서버 시작 시 **`world1.wld`** 파일이 존재하는지 검사합니다.
 
@@ -69,7 +67,7 @@ scp "C:\Users\User\Documents\My Games\Terraria\Worlds\Winter.wld" ubuntu@yeonjae
     *   이는 실수로 맵 파일이 없는 상태에서 서버를 켜서, 빈 맵이 새로 생성되어 덮어쓰여지는 사고를 방지하기 위함입니다.
     *   최초 실행 시에는 PC에서 생성한 맵 파일을 `world_data/` 경로에 `world1.wld` 이름으로 넣어주어야 합니다.
 
-### 3. 🛡️ 자동 백업 시스템 (Auto Backup)
+### 3. 🛡️ 자동 백업 시스템
 
 이 프로젝트는 맵 데이터 손실 방지를 위해 **Git 기반 자동 백업**이 설정되어 있습니다.
 
