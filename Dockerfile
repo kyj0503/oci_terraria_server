@@ -17,10 +17,10 @@ RUN mkdir -p /etc/apt/keyrings \
 # 테라리아 서버 다운로드 (공식 링크 사용)
 WORKDIR /terraria
 
-RUN wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-1452.zip \
-    && unzip terraria-server-1452.zip \
+RUN wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-1453.zip \
+    && unzip terraria-server-1453.zip \
     && mv */Linux/* . \
-    && rm -rf 1452 terraria-server-1452.zip Windows Mac \
+    && rm -rf 1453 terraria-server-1453.zip Windows Mac \
     && chmod +x TerrariaServer.bin.x86_64
 
 # 데이터 경로 설정
