@@ -27,7 +27,10 @@ RUN wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-1
 VOLUME [ "/data" ]
 EXPOSE 7777
 
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 # 실행 명령어 (Box64 구동)
 # -worldpath /data : 호스트와 연결된 볼륨에 맵 저장
-# -autocreate 3 : Large 사이즈 (1=Small, 2=Medium, 3=Large)
-CMD ["box64", "./TerrariaServer.bin.x86_64", "-port", "7777", "-worldpath", "/data", "-world", "/data/world1.wld", "-autocreate", "3"]
+# entrypoint.sh에서 맵 파일 존재 여부를 확인 후 실행함
+CMD ["./entrypoint.sh"]

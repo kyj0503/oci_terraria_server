@@ -1,12 +1,14 @@
 # 🏰 OCI Terraria Server (ARM64 / Box64)
 
 Oracle Cloud (ARM64/Ubuntu 24.04) 환경에서 **Box64**를 이용해 구동하는 테라리아 바닐라(Vanilla) 서버입니다.
+현재 적용된 버전은 **1.4.5.3**입니다.
 x86_64 기반의 공식 서버 파일을 ARM 리눅스에서 네이티브에 준하는 성능으로 실행합니다.
 
 ## 📂 디렉토리 구조
 ```text
 .
 ├── Dockerfile             # Ubuntu 24.04 + Box64 + Terraria Server 설정
+├── entrypoint.sh          # [New] 서버 시작 스크립트 (맵 파일 안전 검사)
 ├── docker-compose.yml     # 컨테이너 실행 및 데이터 볼륨 연결
 ├── backup_map.sh          # [Auto] Git 기반 자동 백업 스크립트
 ├── world_data/            # [Volume] 맵 파일 저장소 (호스트 공유, Git 추적 대상)
@@ -58,7 +60,18 @@ scp "C:\Users\User\Documents\My Games\Terraria\Worlds\Winter.wld" ubuntu@yeonjae
 
 ```
 
-### 2. 🛡️ 자동 백업 시스템 (Auto Backup)
+```
+
+### 2. 🛡️ 시작 안전 장치 (Startup Safety Check)
+
+서버 시작 시 **`world1.wld`** 파일이 존재하는지 검사합니다.
+
+*   **파일 있음:** 정상적으로 서버를 시작합니다.
+*   **파일 없음:** **에러를 출력하고 서버를 즉시 종료합니다.**
+    *   이는 실수로 맵 파일이 없는 상태에서 서버를 켜서, 빈 맵이 새로 생성되어 덮어쓰여지는 사고를 방지하기 위함입니다.
+    *   최초 실행 시에는 PC에서 생성한 맵 파일을 `world_data/` 경로에 `world1.wld` 이름으로 넣어주어야 합니다.
+
+### 3. 🛡️ 자동 백업 시스템 (Auto Backup)
 
 이 프로젝트는 맵 데이터 손실 방지를 위해 **Git 기반 자동 백업**이 설정되어 있습니다.
 
