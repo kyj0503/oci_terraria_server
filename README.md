@@ -60,8 +60,6 @@ scp "C:\Users\User\Documents\My Games\Terraria\Worlds\Winter.wld" ubuntu@yeonjae
 
 ```
 
-```
-
 ### 2. 🛡️ 시작 안전 장치 (Startup Safety Check)
 
 서버 시작 시 **`world1.wld`** 파일이 존재하는지 검사합니다.
