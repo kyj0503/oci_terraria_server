@@ -2,7 +2,10 @@ version: '3'
 
 services:
   terraria:
-    build: .
+    build:
+      context: .
+      args:
+        TERRARIA_VERSION: 1454
     container_name: terraria_box64
     ports:
       - "7777:7777"
