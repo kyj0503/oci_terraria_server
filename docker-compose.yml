@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        TERRARIA_VERSION: 1454
+        TERRARIA_VERSION: ${TERRARIA_VERSION}
     container_name: terraria_box64
     ports:
       - "7777:7777"

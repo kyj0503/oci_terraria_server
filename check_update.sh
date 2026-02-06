@@ -2,20 +2,15 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-VERSION_FILE="$SCRIPT_DIR/.current_version"
+ENV_FILE="$SCRIPT_DIR/.env"
 LOG_FILE="$SCRIPT_DIR/update.log"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
 
-# 현재 버전 확인: .current_version 파일이 있으면 사용, 없으면 Dockerfile에서 추출
-if [ -f "$VERSION_FILE" ]; then
-    CURRENT_VERSION=$(cat "$VERSION_FILE")
-else
-    CURRENT_VERSION=$(grep -oP 'TERRARIA_VERSION=\K[0-9]+' "$SCRIPT_DIR/Dockerfile")
-    echo "$CURRENT_VERSION" > "$VERSION_FILE"
-fi
+# .env에서 현재 버전 확인
+CURRENT_VERSION=$(grep -oP 'TERRARIA_VERSION=\K[0-9]+' "$ENV_FILE")
 
 log "Current version: $CURRENT_VERSION"
 
@@ -52,17 +47,17 @@ fi
 
 log "New version found: $LATEST_VERSION (current: $CURRENT_VERSION)"
 
-# Docker 이미지 리빌드 (build arg로 새 버전 전달)
+# .env 갱신 (docker-compose.yml이 참조)
+sed -i "s/TERRARIA_VERSION=.*/TERRARIA_VERSION=$LATEST_VERSION/" "$ENV_FILE"
+
+# Docker 이미지 리빌드
 log "Rebuilding Docker image..."
 cd "$SCRIPT_DIR"
-docker compose build --no-cache --build-arg TERRARIA_VERSION="$LATEST_VERSION"
+docker compose build --no-cache
 
 # 컨테이너 재시작
 log "Restarting server..."
 docker compose down
 docker compose up -d
-
-# 버전 파일 갱신
-echo "$LATEST_VERSION" > "$VERSION_FILE"
 
 log "Server updated to version $LATEST_VERSION and restarted successfully."
